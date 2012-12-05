@@ -7,7 +7,7 @@
 //
 
 #import "EKEventToiCalAppDelegate.h"
-#import "EKEvent+Utilities.h"
+#import "EKEvent+iCalRepresentation.h"
 #import <EventKit/EventKit.h>
 
 @implementation EKEventToiCalAppDelegate
@@ -20,7 +20,7 @@
     // Override point for customization after application launch.
     [self.window makeKeyAndVisible];
     EKEventStore *store = [[EKEventStore alloc] init];
-    //EKEvent *newEvent = [EKEvent eventWithEventStore:store];
+    //EKEvent+iCalRepresentation *newEvent = [EKEvent+iCalRepresentation eventWithEventStore:store];
     // Create the predicate's start and end dates.
     CFGregorianDate gregorianStartDate, gregorianEndDate;
     CFGregorianUnits startUnits = {0, 0, -365, 0, 0, 0};
@@ -66,7 +66,7 @@
 
     NSMutableString *ical = [NSMutableString string];
     for (EKEvent *event in events) {
-        icalRepresentation = [event iCalString]; 
+        icalRepresentation = [event iCalRepresentation];
 
         [ical appendString:icalRepresentation];
       

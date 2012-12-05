@@ -9,12 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <EventKit/EventKit.h>
 
-@interface EKEvent (Utilities)
+@interface EKEvent (iCalRepresentation)
 
- -(NSString *)genRandStringLength;
-
-
- -(NSMutableString*)iCalString;
-
+ -(NSString*)iCalRepresentation;
 
 @end

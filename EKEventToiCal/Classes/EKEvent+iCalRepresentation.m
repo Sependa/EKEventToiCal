@@ -6,7 +6,7 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "EKEvent+Utilities.h"
+#import "EKEvent+iCalRepresentation.h"
 
 NSString *partstatParamForEKParticipantStatus(EKParticipantStatus status);
 
@@ -14,7 +14,7 @@ NSString *cutypeParamForEKParticipantType(EKParticipantType type);
 
 NSString *roleParamForEKParticipantRole(EKParticipantRole role);
 
-@implementation EKEvent (Utilities)
+@implementation EKEvent (iCalRepresentation)
 
 - (NSString *)genRandStringLength {
     NSString *letters = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -39,22 +39,22 @@ NSString *roleParamForEKParticipantRole(EKParticipantRole role);
     return stringWithDashes;
 }
 
-- (NSMutableString *)iCalString {
+- (NSMutableString *)iCalRepresentation {
 
 
-    NSMutableString *iCalString = [NSMutableString string];
+    NSMutableString *iCalRepresentationString = [NSMutableString string];
 
 
     //The first line must be "BEGIN:VCALENDAR"
-    [iCalString appendString:@"BEGIN:VCALENDAR"];
-    [iCalString appendString:@"\r\nVERSION:2.0"];
+    [iCalRepresentationString appendString:@"BEGIN:VCALENDAR"];
+    [iCalRepresentationString appendString:@"\r\nVERSION:2.0"];
 
 
 
     //calendar
 
     if (self.calendar.title) {
-        //[iCalString appendFormat:@"\r\nX-WR-CALNAME:%@",self.calendar.title];
+        //[iCalRepresentationString appendFormat:@"\r\nX-WR-CALNAME:%@",self.calendar.title];
     }
 
 
@@ -70,7 +70,7 @@ NSString *roleParamForEKParticipantRole(EKParticipantRole role);
 
 
 //Event Start Date
-    [iCalString appendString:@"\r\nBEGIN:VEVENT"];
+    [iCalRepresentationString appendString:@"\r\nBEGIN:VEVENT"];
 
     //allDay
     if (self.allDay) {
@@ -79,13 +79,13 @@ NSString *roleParamForEKParticipantRole(EKParticipantRole role);
         [format1 setDateFormat:@"yyyyMMdd"];
         NSString *allDayDate = [format1 stringFromDate:self.startDate];
 
-        [iCalString appendFormat:@"\r\nDTSTART;VALUE=DATE:%@", allDayDate];
+        [iCalRepresentationString appendFormat:@"\r\nDTSTART;VALUE=DATE:%@", allDayDate];
 
         //get startdate and add 1 day for the end date.
         NSDate *addDay = [self.startDate dateByAddingTimeInterval:86400];
         NSString *allDayEnd = [format1 stringFromDate:addDay];
 
-        [iCalString appendFormat:@"\r\nDTEND;VALUE=DATE:%@", allDayEnd];
+        [iCalRepresentationString appendFormat:@"\r\nDTEND;VALUE=DATE:%@", allDayEnd];
         [format1 release];
 
 
@@ -94,20 +94,20 @@ NSString *roleParamForEKParticipantRole(EKParticipantRole role);
     else {
 
         if (self.startDate && self.endDate) {
-            [iCalString appendString:@"\r\nDTSTART;TZID=America/Denver:"];
+            [iCalRepresentationString appendString:@"\r\nDTSTART;TZID=America/Denver:"];
 
             NSDateFormatter *format2 = [[NSDateFormatter alloc] init];
             [format2 setDateFormat:@"yyyyMMdd'T'HHmmss"];
 
             NSString *dateAsString = [format2 stringFromDate:self.startDate];
-            [iCalString appendString:dateAsString];
+            [iCalRepresentationString appendString:dateAsString];
             //end date
 
-            [iCalString appendString:@"\r\nDTEND;TZID=America/Denver:"];
+            [iCalRepresentationString appendString:@"\r\nDTEND;TZID=America/Denver:"];
 
             NSString *dateAsString1 = [format2 stringFromDate:self.endDate];
 
-            [iCalString appendString:dateAsString1];
+            [iCalRepresentationString appendString:dateAsString1];
 
             [format2 release];
 
@@ -121,41 +121,41 @@ NSString *roleParamForEKParticipantRole(EKParticipantRole role);
     [format3 setDateFormat:@"yyyyMMdd'T'HHmmss'Z'"];
 
     if (self.creationDate) {
-        [iCalString appendString:@"\r\nDTSTAMP:"];    //date the event was created
+        [iCalRepresentationString appendString:@"\r\nDTSTAMP:"];    //date the event was created
 
         NSString *dateAsString2 = [format3 stringFromDate:self.creationDate];
-        [iCalString appendString:dateAsString2];
+        [iCalRepresentationString appendString:dateAsString2];
     }
 
     //lastModifiedDate
     if (self.lastModifiedDate) {
 
-        [iCalString appendString:@"\r\nLAST-MODIFIED:"];
+        [iCalRepresentationString appendString:@"\r\nLAST-MODIFIED:"];
 
         NSString *dateAsString2 = [format3 stringFromDate:self.lastModifiedDate];
-        [iCalString appendString:dateAsString2];
+        [iCalRepresentationString appendString:dateAsString2];
 
     }
     [format3 release];
     //UID is generated randomly
     NSString *a = [self genRandStringLength];
-    [iCalString appendFormat:@"\r\nUID:%@0000000000000000000", a];
+    [iCalRepresentationString appendFormat:@"\r\nUID:%@0000000000000000000", a];
 
 
 
     //attendees @TODO: The property is read-only and cannot be modified so this is not complete or tested
 
     for (EKParticipant *attend in self.attendees) {
-        [iCalString appendString:@"\r\nATTENDEE"];
-        [self appendParticipant:attend toICalString:iCalString];
+        [iCalRepresentationString appendString:@"\r\nATTENDEE"];
+        [self appendParticipant:attend toICalString:iCalRepresentationString];
     }
 
     //availability @TODO:    The property is read-only and cannot be modified so this is not complete or tested
     if (self.availability == EKEventAvailabilityFree) {
-        [iCalString appendString:@"\r\nTRANSP:TRANSPARENT"];
+        [iCalRepresentationString appendString:@"\r\nTRANSP:TRANSPARENT"];
     }
     else {
-        [iCalString appendString:@"\r\nTRANSP:OPAQUE"];
+        [iCalRepresentationString appendString:@"\r\nTRANSP:OPAQUE"];
     }
 
     //eventIdentifier @TODO: The property is read-only and cannot be modified so this is not complete or tested
@@ -164,13 +164,13 @@ NSString *roleParamForEKParticipantRole(EKParticipantRole role);
 
     //location
     if (self.location) {
-        [iCalString appendFormat:@"\r\nLOCATION:%@", self.location];
+        [iCalRepresentationString appendFormat:@"\r\nLOCATION:%@", self.location];
     }
 
     //organizer @TODO: The property is read-only and cannot be modified so this is not complete or tested
     if (self.organizer != nil) {
-        [iCalString appendString:@"\r\nORGANIZER"];
-        [self appendParticipant:self.organizer toICalString:iCalString];
+        [iCalRepresentationString appendString:@"\r\nORGANIZER"];
+        [self appendParticipant:self.organizer toICalString:iCalRepresentationString];
     }
 
     //recurrenceRule
@@ -184,40 +184,40 @@ NSString *roleParamForEKParticipantRole(EKParticipantRole role);
                 // int loc = [secondHalf rangeOfString:@"Z"].location;
                 //if (loc > 0) {
                 //   return [secondHalf substringToIndex:loc];
-                [iCalString appendFormat:@"\r\nRRULE:%@", secondHalf];
+                [iCalRepresentationString appendFormat:@"\r\nRRULE:%@", secondHalf];
             }
         }
     }
 
     //When a calendar component is created, its sequence number is zero 
-    [iCalString appendString:@"\r\nSEQUENCE:0"];
+    [iCalRepresentationString appendString:@"\r\nSEQUENCE:0"];
 
     //status
     if (self.status == 1) {
-        [iCalString appendString:@"\r\nSTATUS:CONFIRMED"];
+        [iCalRepresentationString appendString:@"\r\nSTATUS:CONFIRMED"];
     }
     if (self.status == 2) {
-        [iCalString appendString:@"\r\nSTATUS:TENTATIVE"];
+        [iCalRepresentationString appendString:@"\r\nSTATUS:TENTATIVE"];
     }
     if (self.status == 3) {
-        [iCalString appendString:@"\r\nSTATUS:CANCELLED"];
+        [iCalRepresentationString appendString:@"\r\nSTATUS:CANCELLED"];
     }
 
     //Event Title
     if (self.title) {
-        [iCalString appendFormat:@"\r\nSUMMARY:%@", self.title];
+        [iCalRepresentationString appendFormat:@"\r\nSUMMARY:%@", self.title];
     }
 
     //Notes
     if (self.notes) {
-        [iCalString appendFormat:@"\r\nDESCRIPTION:%@", self.notes];
+        [iCalRepresentationString appendFormat:@"\r\nDESCRIPTION:%@", self.notes];
     }
 
     //Alarm
     for (EKAlarm *alarm in self.alarms) {
-        [iCalString appendString:@"\r\nBEGIN:VALARM"];
-        [iCalString appendString:@"\r\nACTION:DISPLAY"];//a message(usually the title of the event) will be displayed
-//        [iCalString appendString:@"\r\nDESCRIPTION:event reminder"]; //notes with the alarm--not the message.
+        [iCalRepresentationString appendString:@"\r\nBEGIN:VALARM"];
+        [iCalRepresentationString appendString:@"\r\nACTION:DISPLAY"];//a message(usually the title of the event) will be displayed
+//        [iCalRepresentationString appendString:@"\r\nDESCRIPTION:event reminder"]; //notes with the alarm--not the message.
 
         if (alarm.absoluteDate) {
 
@@ -227,12 +227,12 @@ NSString *roleParamForEKParticipantRole(EKParticipantRole role);
             NSString *dateAsString3 = [format3 stringFromDate:alarm.absoluteDate];
             [format3 release];
 
-            [iCalString appendFormat:@"\r\nTRIGGER;VALUE=DATE-TIME:%@", dateAsString3];
+            [iCalRepresentationString appendFormat:@"\r\nTRIGGER;VALUE=DATE-TIME:%@", dateAsString3];
 
         }
         if (alarm.relativeOffset) {
 
-            //converts offset to D H M S then appends it to iCalString
+            //converts offset to D H M S then appends it to iCalRepresentationString
             NSInteger offset = alarm.relativeOffset;
             int i = offset * -1;
 
@@ -247,47 +247,47 @@ NSString *roleParamForEKParticipantRole(EKParticipantRole role);
 
             int second = i;
 
-            [iCalString appendFormat:@"\r\nTRIGGER:-P"];
+            [iCalRepresentationString appendFormat:@"\r\nTRIGGER:-P"];
 
             if (day != 0) {
 
-                [iCalString appendFormat:@"%dD", day];
+                [iCalRepresentationString appendFormat:@"%dD", day];
 
             }
             if (hour || minute || second != 0) {
-                [iCalString appendString:@"T"];
+                [iCalRepresentationString appendString:@"T"];
 
                 if (hour != 0) {
 
-                    [iCalString appendFormat:@"%dH", hour];
+                    [iCalRepresentationString appendFormat:@"%dH", hour];
 
                 }
                 if (minute != 0) {
 
-                    [iCalString appendFormat:@"%dM", minute];
+                    [iCalRepresentationString appendFormat:@"%dM", minute];
 
                 }
                 if (second != 0) {
 
-                    [iCalString appendFormat:@"%dS", second];
+                    [iCalRepresentationString appendFormat:@"%dS", second];
 
                 }
             }
         }
         NSString *b = [self genRandStringLength];
 
-        [iCalString appendFormat:@"\r\nX-WR-ALARMUID:%@", b];
+        [iCalRepresentationString appendFormat:@"\r\nX-WR-ALARMUID:%@", b];
 
-        [iCalString appendString:@"\r\nEND:VALARM"];
+        [iCalRepresentationString appendString:@"\r\nEND:VALARM"];
 
     }
 
-    [iCalString appendString:@"\r\nEND:VEVENT"];
+    [iCalRepresentationString appendString:@"\r\nEND:VEVENT"];
 
     //The last line must be "END:VCALENDAR"
-    [iCalString appendString:@"\r\nEND:VCALENDAR"];
+    [iCalRepresentationString appendString:@"\r\nEND:VCALENDAR"];
 
-    return iCalString;
+    return [[iCalRepresentationString copy] autorelease];
 }
 
 - (void)appendParticipant:(EKParticipant *)participant toICalString:(NSMutableString *)iCalString {

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "EKEventToiCal"
-  s.version      = "1.0.1"
+  s.version      = "1.0.2"
   s.summary      = "Category on EKEvent return a string in iCal format."
   s.homepage     = "https://github.com/Taptera/EKEventToiCal.git"
   s.license      = "Taptera"
