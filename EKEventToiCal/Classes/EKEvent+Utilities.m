@@ -202,15 +202,19 @@
     }
     
     //recurrenceRule
-    NSString *recurrenceString = [NSString stringWithFormat:@"%@", self.recurrenceRule];
-    NSArray *partsArray = [recurrenceString componentsSeparatedByString:@"RRULE "];
-    
-    if ([partsArray count] > 1) {
-        NSString *secondHalf = [partsArray objectAtIndex:1];
-        // int loc = [secondHalf rangeOfString:@"Z"].location;
-        //if (loc > 0) {
-        //   return [secondHalf substringToIndex:loc];
-        [iCalString appendFormat:@"\r\nRRULE:%@",secondHalf];
+    if ([self respondsToSelector:@selector(recurrenceRules)]) {
+        for (EKRecurrenceRule *rule in self.recurrenceRules) {
+            NSString *recurrenceString = [rule description];
+            NSArray *partsArray = [recurrenceString componentsSeparatedByString:@"RRULE "];
+
+            if ([partsArray count] > 1) {
+                NSString *secondHalf = [partsArray objectAtIndex:1];
+                // int loc = [secondHalf rangeOfString:@"Z"].location;
+                //if (loc > 0) {
+                //   return [secondHalf substringToIndex:loc];
+                [iCalString appendFormat:@"\r\nRRULE:%@",secondHalf];
+            }
+        }
     }
     
     //When a calendar component is created, its sequence number is zero 

@@ -24,7 +24,8 @@
 		37CB95DB139E8FEB0053AE30 /* EKEventToiCalTests.h in Resources */ = {isa = PBXBuildFile; fileRef = 37CB95DA139E8FEB0053AE30 /* EKEventToiCalTests.h */; };
 		37CB95DD139E8FEB0053AE30 /* EKEventToiCalTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CB95DC139E8FEB0053AE30 /* EKEventToiCalTests.m */; };
 		37CB95E7139E8FF90053AE30 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37CB95E6139E8FF90053AE30 /* EventKit.framework */; };
-		37CB95EA139E91210053AE30 /* EKEvent+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CB95E9139E91200053AE30 /* EKEvent+Utilities.m */; };
+		86005790166F4EEF003E6BFF /* EKEvent+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 8600578F166F4EEF003E6BFF /* EKEvent+Utilities.m */; };
+		86005791166F4EEF003E6BFF /* EKEvent+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 8600578F166F4EEF003E6BFF /* EKEvent+Utilities.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,8 +62,8 @@
 		37CB95DA139E8FEB0053AE30 /* EKEventToiCalTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EKEventToiCalTests.h; sourceTree = "<group>"; };
 		37CB95DC139E8FEB0053AE30 /* EKEventToiCalTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EKEventToiCalTests.m; sourceTree = "<group>"; };
 		37CB95E6139E8FF90053AE30 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
-		37CB95E8139E91200053AE30 /* EKEvent+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EKEvent+Utilities.h"; sourceTree = "<group>"; };
-		37CB95E9139E91200053AE30 /* EKEvent+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EKEvent+Utilities.m"; sourceTree = "<group>"; };
+		8600578E166F4EEF003E6BFF /* EKEvent+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EKEvent+Utilities.h"; sourceTree = "<group>"; };
+		8600578F166F4EEF003E6BFF /* EKEvent+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EKEvent+Utilities.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,10 +124,9 @@
 		37CB95AE139E8FEA0053AE30 /* EKEventToiCal */ = {
 			isa = PBXGroup;
 			children = (
+				8600578D166F4EEF003E6BFF /* Classes */,
 				37CB95B7139E8FEA0053AE30 /* EKEventToiCalAppDelegate.h */,
 				37CB95B8139E8FEA0053AE30 /* EKEventToiCalAppDelegate.m */,
-				37CB95E8139E91200053AE30 /* EKEvent+Utilities.h */,
-				37CB95E9139E91200053AE30 /* EKEvent+Utilities.m */,
 				37CB95BA139E8FEA0053AE30 /* iPhone */,
 				37CB95C1139E8FEB0053AE30 /* iPad */,
 				37CB95AF139E8FEA0053AE30 /* Supporting Files */,
@@ -183,6 +183,15 @@
 				37CB95D9139E8FEB0053AE30 /* EKEventToiCalTests-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		8600578D166F4EEF003E6BFF /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				8600578E166F4EEF003E6BFF /* EKEvent+Utilities.h */,
+				8600578F166F4EEF003E6BFF /* EKEvent+Utilities.m */,
+			);
+			path = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -294,7 +303,7 @@
 				37CB95B9139E8FEA0053AE30 /* EKEventToiCalAppDelegate.m in Sources */,
 				37CB95BD139E8FEA0053AE30 /* EKEventToiCalAppDelegate_iPhone.m in Sources */,
 				37CB95C4139E8FEB0053AE30 /* EKEventToiCalAppDelegate_iPad.m in Sources */,
-				37CB95EA139E91210053AE30 /* EKEvent+Utilities.m in Sources */,
+				86005790166F4EEF003E6BFF /* EKEvent+Utilities.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +312,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				37CB95DD139E8FEB0053AE30 /* EKEventToiCalTests.m in Sources */,
+				86005791166F4EEF003E6BFF /* EKEvent+Utilities.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
